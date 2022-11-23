@@ -33,6 +33,3 @@ def filter_numbers(digit, filter_type):  # digigt as [1, 2, 3, 4]; filter_type a
         return [i for i in digit if i % 2 == 0]
     if filter_type == PRIME:
         return [i for i in digit if is_prime(i) is True and i > 1]
-
-
-print(filter_numbers([0, 1, 2, 3, 5, 7, 11], PRIME))
