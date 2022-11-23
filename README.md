@@ -1,4 +1,4 @@
-#<h1 align="center"> Hi, my name is STAS </h1>
+<h1 align="center"> Hi, my name is STAS </h1>
 - 30 y.o</p>
 - From Russia: Yoshkar-Ola, St. Petersburg</p>
 
