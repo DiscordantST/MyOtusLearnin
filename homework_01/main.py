@@ -23,7 +23,6 @@ PRIME = "prime"
 
 def is_prime(digit):
     """
-
     :param digit: PRIME digit
     :return: True if digit is PRIME, False is digit is not PRIME
     """
