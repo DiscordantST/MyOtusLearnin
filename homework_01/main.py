@@ -22,6 +22,7 @@ PRIME = "prime"
 def prime_number(digit_from_sequence):
     """
     A prime number is an integer that is only divisible by 1 and by itself without a remainder
+    info about prime numbers https://en.wikipedia.org/wiki/List_of_prime_numbers)
     :param digit_from_sequence: sequence number
     :return: True if digit is PRIME
     """
@@ -70,3 +71,4 @@ def filter_numbers(sequence, filter_type):
     if filter_type == PRIME:
         prime_number_list = filter(prime_number, sequence)
         return list(prime_number_list)
+
