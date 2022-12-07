@@ -26,11 +26,11 @@ def prime_number(digit_from_sequence):
     :param digit_from_sequence: sequence number
     :return: True if digit is PRIME
     """
-    count = 0
+    divisor_count = 0
     for elem in range(2, digit_from_sequence // 2 + 1):
         if digit_from_sequence % elem == 0:
-            count += 1
-    if count <= 0 and digit_from_sequence > 1:
+            divisor_count += 1
+    if divisor_count <= 0 and digit_from_sequence > 1:
         return True
 
 
