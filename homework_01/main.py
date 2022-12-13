@@ -71,4 +71,3 @@ def filter_numbers(sequence, filter_type):
     if filter_type == PRIME:
         prime_number_list = filter(prime_number, sequence)
         return list(prime_number_list)
-
