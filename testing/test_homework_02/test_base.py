@@ -59,7 +59,7 @@ class TestVehicle:
         max_distance = vehicle.fuel // vehicle.fuel_consumption
         distance = fake.pyint(1, max_distance)
         expected = vehicle.fuel - distance * vehicle.fuel_consumption
-        vehicle.move(distance)
+        vehicle.move
         assert vehicle.fuel == expected
 
     def test_move_when_exactly_enough_fuel(self, vehicle):
@@ -67,7 +67,7 @@ class TestVehicle:
         distance = fake.pyint(3, 9)
         # exactly enough fuel! after travel fuel will be 0
         vehicle.fuel = distance * vehicle.fuel_consumption
-        vehicle.move(distance)
+        vehicle.move
         assert vehicle.fuel == 0
 
     @pytest.mark.parametrize("fuel", [
@@ -79,7 +79,7 @@ class TestVehicle:
         assert vehicle.fuel_consumption > 0
 
         with pytest.raises(exceptions.NotEnoughFuel):
-            vehicle.move(1)
+            vehicle.move
 
     def test_move_not_enough_fuel(self, vehicle):
         # set fuel enough only for 2
@@ -89,7 +89,7 @@ class TestVehicle:
         fuel = vehicle.fuel
 
         with pytest.raises(exceptions.NotEnoughFuel):
-            vehicle.move(3)
-        
+            vehicle.move
+
         # check no fuel was spent on a faulty attempt
         assert vehicle.fuel == fuel, 'lost some fuel after a faulty attempt to move!'
