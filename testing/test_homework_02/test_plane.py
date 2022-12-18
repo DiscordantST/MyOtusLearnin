@@ -15,7 +15,7 @@ def plane():
     fuel = fake.pyint()
     fuel_consumption = fake.pyint()
     max_cargo = fake.pyint(1000, 50000)
-    plane = module_plane.Plane(weight, fuel, fuel_consumption, max_cargo)
+    plane = module_plane.Plane(weight, fuel, fuel_consumption, max_cargo, )
     return plane
 
 
@@ -26,7 +26,7 @@ class TestPlane:
         fuel = fake.pyint()
         fuel_consumption = fake.pyint()
         max_cargo = fake.pyint(1000, 50000)
-        plane = module_plane.Plane(weight, fuel, fuel_consumption, max_cargo)
+        plane = module_plane.Plane(weight, fuel, fuel_consumption, max_cargo, )
         assert isinstance(plane, module_base.Vehicle)
         assert plane.weight == weight
         assert plane.fuel == fuel

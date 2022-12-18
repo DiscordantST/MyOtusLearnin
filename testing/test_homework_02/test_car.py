@@ -25,7 +25,7 @@ class TestCar:
         volume = fake.pyint(1, 10)
         pistons = fake.pyint(2, 12)
         engine = module_engine.Engine(volume=volume, pistons=pistons)
-        car = module_car.Car(0, 0, 0)
+        car = module_car
         car.set_engine(engine)
         assert car.engine is engine
         assert car.engine.volume == volume
