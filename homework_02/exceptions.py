@@ -19,3 +19,4 @@ class NotEnoughFuel(Exception):
 class CargoOverload(Exception):
     def __str__(self):
         return f"Exception: Car go over load"
+

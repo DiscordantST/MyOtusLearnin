@@ -4,7 +4,7 @@ from homework_02.exceptions import LowFuelError, NotEnoughFuel
 
 class Vehicle(ABC):
 
-    def __init__(self, weight, fuel, fuel_consumption, started=False):
+    def __init__(self, weight, fuel=0, fuel_consumption=0, started=False):
         self.weight = weight
         self.fuel = fuel
         self.fuel_consumption = fuel_consumption
@@ -26,7 +26,7 @@ class Vehicle(ABC):
         if there is not enough fuel we return an error NotEnoughFuel
         :param distance: the distance the car has to travel
         """
-        if self.fuel > 0 and self.fuel_consumption > 0 and self.fuel >= self.fuel_consumption * distance:
+        if self.fuel >= self.fuel_consumption * distance:
             self.fuel -= distance * self.fuel_consumption
         else:
             raise NotEnoughFuel()
