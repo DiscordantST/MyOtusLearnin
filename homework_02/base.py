@@ -3,15 +3,12 @@ from homework_02.exceptions import LowFuelError, NotEnoughFuel
 
 
 class Vehicle(ABC):
-    weight = 0
-    started = False
-    fuel = 0
-    fuel_consumption = 0
 
-    def __init__(self, weight, fuel, fuel_consumption):
+    def __init__(self, weight, fuel, fuel_consumption, started=False):
         self.weight = weight
         self.fuel = fuel
         self.fuel_consumption = fuel_consumption
+        self.started = started
 
     def start(self):
         """Check self.started and check self.fuel if started is False and fuel > 0
@@ -29,19 +26,11 @@ class Vehicle(ABC):
         if there is not enough fuel we return an error NotEnoughFuel
         :param distance: the distance the car has to travel
         """
-        fuel = distance / self.fuel_consumption
-        if fuel <= self.fuel:
-            self.fuel -= fuel
+        if self.fuel > 0 and self.fuel_consumption > 0 and self.fuel >= self.fuel_consumption * distance:
+            self.fuel -= distance * self.fuel_consumption
         else:
             raise NotEnoughFuel()
 
 
 
 
-
-
-
-#
-# - добавьте метод `move`, который проверяет,
-#       что топлива достаточно для преодоления переданной дистанции (вплоть до полного расхода),
-#       и изменяет количество оставшегося топлива, иначе выкидывает исключение `exceptions.NotEnoughFuel`
