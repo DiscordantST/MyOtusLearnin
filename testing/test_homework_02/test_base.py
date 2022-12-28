@@ -7,7 +7,6 @@ homework = pytest.importorskip("homework_02")
 base = homework.base
 exceptions = homework.exceptions
 
-
 CONSUMPTION_MIN = fake.pyint(9, 13)
 
 
@@ -90,6 +89,6 @@ class TestVehicle:
 
         with pytest.raises(exceptions.NotEnoughFuel):
             vehicle.move(3)
-        
+
         # check no fuel was spent on a faulty attempt
         assert vehicle.fuel == fuel, 'lost some fuel after a faulty attempt to move!'
