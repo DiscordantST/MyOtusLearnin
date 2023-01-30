@@ -9,10 +9,9 @@ FROM python:3.10-buster
 
 WORKDIR /usr/src/homework_03/
 
-RUN pip install fastapi uvicorn
-RUN pip freeze -> requirements.txt
-
 COPY . /usr/src/homework_03/
+
+RUN pip install -r requirements.txt
 
 WORKDIR /usr/src/homework_03/view/
 
