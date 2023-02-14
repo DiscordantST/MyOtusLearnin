@@ -1,69 +1,92 @@
-from pathlib import Path
-from time import sleep
-
-import docker
-import requests
 import pytest
+
+# import homework package and skip the whole test if not available
+homework = pytest.importorskip("homework_04")
+
+import requests
 from faker import Faker
 
-
-current_file = Path(__file__).resolve()
-folder_test_homework_0X = current_file.parent
-homework_0X = folder_test_homework_0X.name.replace("test_", "")
-homework_0X_path = folder_test_homework_0X.parent.parent / homework_0X
-dockerfile_path = homework_0X_path / "Dockerfile"
-
-if not (dockerfile_path.is_file() and len(dockerfile_path.read_text().splitlines()) > 5):
-    pytestmark = pytest.mark.skip("Dockerfile is not ready")
-
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload, joinedload
 
 fake = Faker()
 
+module_models = homework.models
+module_main = homework.main
+module_jsonplaceholder_requests = homework.jsonplaceholder_requests
 
-PORT = 8000
-LOCAL_PORT = 12345
-
-
-@pytest.fixture
-def docker_client():
-    return docker.from_env()
+pytestmark = pytest.mark.asyncio
 
 
-@pytest.fixture
-def image_name():
-    tag = f"homework-image-{fake.word()}:latest"
-    print(f"name for image: {repr(tag)}")
-    return tag
+def get_data(url):
+    response = requests.get(url)
+    return response.json()
 
 
-@pytest.fixture
-def build_image(docker_client):
-    build_path = str(homework_0X_path)
-    print("Building in", build_path)
-    image_object, build_logs = docker_client.images.build(
-        path=build_path,
-        # dockerfile=str(dockerfile_path),
-        # tag=image_name,
-    )
-    yield image_object
-    # print logs?
+@pytest.fixture(scope="module")
+def users_data():
+    return get_data(module_jsonplaceholder_requests.USERS_DATA_URL)
 
 
-@pytest.fixture
-def run_image(docker_client, build_image):
-    from docker.models.containers import Container
-    container: Container = docker_client.containers.run(build_image, detach=True, ports={PORT: LOCAL_PORT})
-    print("running docker container detached")
-    # give some time to for the web app to start
-    sleep(1)
-    yield container
-    print("stopping docker container")
-    container.stop()
-    print("docker container stopped")
+@pytest.fixture(scope="module")
+def posts_data():
+    return get_data(module_jsonplaceholder_requests.POSTS_DATA_URL)
 
 
-def test_build_and_run_app(run_image):
-    print("sending request to the image")
-    resp: requests.Response = requests.get(f"http://localhost:{LOCAL_PORT}/ping/")
-    assert resp.status_code == 200
-    assert resp.json() == {"message": "pong"}
+def check_data_match(items_from_db, items_from_remote, args_mapping: dict):
+    assert len(items_from_db) == len(items_from_remote)
+    db_data = {
+        item.id: [
+            getattr(item, k)
+            for k in args_mapping.keys()
+        ]
+        for item in items_from_db
+    }
+    remote_data = {
+        item["id"]: [
+            item[k]
+            for k in args_mapping.values()
+        ]
+        for item in items_from_remote
+    }
+    assert db_data == remote_data
+
+
+async def test_main(users_data, posts_data):
+    await module_main.async_main()
+
+    stmt_query_users = select(module_models.User).options(selectinload(module_models.User.posts))
+    stmt_query_posts = select(module_models.Post).options(joinedload(module_models.Post.user))
+
+    users = []
+    posts = []
+
+    async with module_models.Session() as session:
+        # there're problems with asyncio.gather in pytest :/
+        # res_users, res_posts = await asyncio.gather(
+        #     session.execute(stmt_query_users),
+        #     session.execute(stmt_query_posts),
+        # )
+        res_users = await session.execute(stmt_query_users)
+        res_posts = await session.execute(stmt_query_posts)
+
+        users.extend(res_users.scalars())
+        posts.extend(res_posts.scalars())
+
+    assert len(posts) == len(posts_data)
+
+    check_data_match(users, users_data, args_mapping=dict(
+        name="name",
+        username="username",
+        email="email",
+    ))
+    check_data_match(posts, posts_data, args_mapping=dict(
+        user_id="userId",
+        title="title",
+        body="body",
+    ))
+
+    for post in posts:
+        # check relationships
+        assert post.user in users
+        assert post in post.user.posts
