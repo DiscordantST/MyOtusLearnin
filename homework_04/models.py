@@ -8,8 +8,6 @@
 создайте связи relationship между моделями: User.posts и Post.user
 """
 
-import os
-
 from sqlalchemy import Integer, Column, String, ForeignKey, Text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, AsyncSession
 from sqlalchemy.orm import declarative_base, sessionmaker, declared_attr, relationship

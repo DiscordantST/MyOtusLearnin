@@ -13,73 +13,31 @@
 - закрытие соединения с БД
 """
 import asyncio
-
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from models import async_engine, Base, User, Post, Session
+from homework_04.fetch_data.fetch_user import fetch_user
+from homework_04.fetch_data.fetch_post import fetch_post
+from models import async_engine, Base, Session
 from jsonplaceholder_requests import users, posts
 
 
 async def async_main():
-    async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(Base.metadata.create_all)
+    async with async_engine.begin() as conn:  # Initialize the creation of tables
+        await conn.run_sync(Base.metadata.drop_all)  # Drop table for avoid duplicate
+        await conn.run_sync(Base.metadata.create_all)  # Create new table
 
-    async with Session() as session:
+    async with Session() as session:  # Open session
         async with session.begin():
-            async def fetch_user(users_list: list) -> str:
-                tasks = {
-                    asyncio.create_task(
-                        create_user(session=session,
-                                    name=user['name'],
-                                    username=user['username'], email=user['email']
-                                    )
-                    )
-                    for user in users_list
-                }
-                await asyncio.wait(tasks)
 
-            async def fetch_post(posts_list: list) -> str:
-                tasks = {
-                    asyncio.create_task(
-                        create_post(session=session,
-                                    user_id=post['userId'],
-                                    title=post['title'], body=post['body']
-                                    )
-                    )
-                    for post in posts_list
-                }
-                await asyncio.wait(tasks)
-
-            await asyncio.gather(
-                fetch_user(users),
-                fetch_post(posts)
-
+            await asyncio.gather(  # fect users and post
+                fetch_user(users, session),
+                fetch_post(posts, session)
             )
-            await session.commit()
 
-
-async def create_user(session: AsyncSession, name: str, username: str, email: str) -> User:
-    user = User(name=name,
-                username=username,
-                email=email)
-    session.add(user)
-    # await session.commit()
-    return user
-
-
-async def create_post(session: AsyncSession, user_id: int, title: str, body: str) -> Post:
-    post = Post(user_id=user_id,
-                title=title,
-                body=body)
-    session.add(post)
-    # await session.commit()
-    return post
+            await session.commit()  # commit all add users and posts
 
 
 def main():
-    asyncio.run(async_main())
+    asyncio.run(async_main())  # run func async_main
 
 
 if __name__ == "__main__":
-    main()
+    main()  # run main func
