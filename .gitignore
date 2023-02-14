@@ -139,4 +139,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-!/homework_04/docker-compose.yaml
