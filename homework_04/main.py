@@ -25,15 +25,13 @@ async def async_main():
         await conn.run_sync(Base.metadata.create_all)  # Create new table
 
     async with Session() as session:  # Open session
-        # async with session.begin():
+            await session.close()
 
-        await asyncio.gather(  # fect users and post
-            fetch_user(users, session),
-            fetch_post(posts, session)
-        )
-
-        await session.commit()  # commit all add users and posts
-    await session.close()
+            await asyncio.gather(  # fect users and post
+                fetch_user(users, session),
+                fetch_post(posts, session)
+            )
+            await session.commit()  # commit all add users and posts
 
 
 def main():
