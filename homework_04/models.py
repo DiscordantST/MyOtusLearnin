@@ -11,6 +11,8 @@
 from sqlalchemy import Integer, Column, String, ForeignKey, Text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, AsyncSession
 from sqlalchemy.orm import declarative_base, sessionmaker, declared_attr, relationship
+from sqlalchemy.pool import NullPool
+
 import config
 import os
 
@@ -19,6 +21,7 @@ PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or config.DB_URL
 async_engine: AsyncEngine = create_async_engine(
         url=PG_CONN_URI,
         echo=config.DB_ECHO,
+        poolclass=NullPool
     )
 
 Session = sessionmaker(
