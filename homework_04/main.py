@@ -33,6 +33,7 @@ async def async_main():
             )
 
             await session.commit()  # commit all add users and posts
+            await session.close()
 
 
 def main():
