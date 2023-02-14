@@ -23,16 +23,13 @@ async def async_main():
     async with async_engine.begin() as conn:  # Initialize the creation of tables
         await conn.run_sync(Base.metadata.drop_all)  # Drop table for avoid duplicate
         await conn.run_sync(Base.metadata.create_all)  # Create new table
-
     async with Session() as session:  # Open session
         async with session.begin():
-
             await asyncio.gather(  # fect users and post
                 fetch_user(users, session),
                 fetch_post(posts, session)
             )
-
-            await session.commit()  # commit all add users and posts
+        await session.commit()  # commit all add users and posts
 
 
 def main():

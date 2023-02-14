@@ -18,6 +18,3 @@ async def fetch_post_data(post_data_url: str) -> list:  # get data for POSTS_DAT
 
 users = asyncio.run(fetch_users_data(USERS_DATA_URL))  # list data users
 posts = asyncio.run(fetch_post_data(POSTS_DATA_URL))  # lists data posts
-
-
-
