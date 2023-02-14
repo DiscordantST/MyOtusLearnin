@@ -14,7 +14,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker, declared_attr, relati
 import config
 import os
 
-PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://postgres:password@localhost/postgres"
+PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or config.DB_URL
 
 async_engine: AsyncEngine = create_async_engine(
         url=PG_CONN_URI,

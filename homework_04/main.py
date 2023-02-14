@@ -21,7 +21,7 @@ from jsonplaceholder_requests import users, posts
 
 async def async_main():
     async with async_engine.begin() as conn:  # Initialize the creation of tables
-        # await conn.run_sync(Base.metadata.drop_all)  # Drop table for avoid duplicate
+        await conn.run_sync(Base.metadata.drop_all)  # Drop table for avoid duplicate
         await conn.run_sync(Base.metadata.create_all)  # Create new table
 
     async with Session() as session:  # Open session
