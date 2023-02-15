@@ -7,4 +7,4 @@ async def create_user(session: AsyncSession, name: str, username: str, email: st
                 username=username,
                 email=email)
     session.add(user)
-    return user
+    return await user

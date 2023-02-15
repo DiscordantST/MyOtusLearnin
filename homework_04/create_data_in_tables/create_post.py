@@ -7,4 +7,4 @@ async def create_post(session: AsyncSession, user_id: int, title: str, body: str
                 title=title,
                 body=body)
     session.add(post)
-    return post
+    return await post
