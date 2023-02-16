@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Otus flask app</h1>
+<p>This demo uses Bootstrap version 5.</p>
+<ul>
+    <li><a href="{{ url_for('index_page') }}">Home</a></li>
+    <li><a href="{{ url_for('about_page') }}">About</a></li>
+
+</ul>
+{% endblock %}
