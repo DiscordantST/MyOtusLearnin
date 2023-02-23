@@ -15,9 +15,14 @@ from flask import Flask, render_template
 from flask_bootstrap import Bootstrap5
 
 
-app = Flask(__name__)
-app.config.update(ENV='development')
-bootstrap = Bootstrap5(app)
+def create_app():
+    application = Flask(__name__)
+    application.config.update(ENV='development')
+    Bootstrap5(application)
+    return application
+
+
+app = create_app()
 
 
 @app.route('/')
@@ -31,5 +36,5 @@ def about_page():
 
 
 if __name__ == "__main__":
-    app.run(debug=True,
-            port=8001)
+    app.run(port=8001,
+            debug=False)
