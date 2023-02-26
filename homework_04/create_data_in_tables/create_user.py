@@ -11,3 +11,5 @@ async def create_user(session: AsyncSession, name: str, username: str, email: st
     session.add(user)
     await asyncio.sleep(0.5)
     return user
+
+

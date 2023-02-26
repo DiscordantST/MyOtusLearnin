@@ -13,3 +13,4 @@ async def find_user(users_list: list, session) -> str:
         for user in users_list
     }
     await asyncio.wait(tasks)
+

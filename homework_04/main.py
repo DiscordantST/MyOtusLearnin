@@ -13,6 +13,8 @@
 - закрытие соединения с БД
 """
 import asyncio
+
+from homework_04.create_data_in_tables.create_user import create_user
 from homework_04.find_data.find_user import find_user
 from homework_04.find_data.find_post import find_post
 from models import async_engine, Base, Session
