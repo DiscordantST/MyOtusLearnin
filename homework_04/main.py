@@ -13,8 +13,8 @@
 - закрытие соединения с БД
 """
 import asyncio
-from homework_04.fetch_data.fetch_user import fetch_user
-from homework_04.fetch_data.fetch_post import fetch_post
+from homework_04.fetch_data.find_user import find_user
+from homework_04.fetch_data.find_post import find_post
 from models import async_engine, Base, Session
 from jsonplaceholder_requests import users, posts
 
@@ -25,9 +25,9 @@ async def async_main():
         await conn.run_sync(Base.metadata.create_all)  # Create new table
     async with Session() as session:  # Open session
         async with session.begin():
-            await asyncio.gather(  # fect users and post
-                fetch_user(users, session),
-                fetch_post(posts, session)
+            await asyncio.gather(
+                find_user(users, session),
+                find_post(posts, session)
             )
         await session.commit()  # commit all add users and posts
         await session.close()

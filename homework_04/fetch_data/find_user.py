@@ -2,7 +2,7 @@ import asyncio
 from homework_04.create_data_in_tables.create_user import create_user
 
 
-async def fetch_user(users_list: list, session) -> str:
+async def find_user(users_list: list, session) -> str:
     tasks = {
         asyncio.create_task(
             create_user(session=session,
