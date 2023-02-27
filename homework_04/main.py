@@ -13,9 +13,6 @@
 - закрытие соединения с БД
 """
 import asyncio
-
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from models import async_engine, Base, Session
 from jsonplaceholder_requests import fetch_users_data, fetch_post_data, USERS_DATA_URL, POSTS_DATA_URL
 from create_data.create_user import *
