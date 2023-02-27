@@ -2,7 +2,6 @@ import pytest
 
 module_app = pytest.importorskip("homework_05.app")
 
-
 @pytest.fixture
 def client():
     try:
