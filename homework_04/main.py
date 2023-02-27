@@ -13,24 +13,25 @@
 - закрытие соединения с БД
 """
 import asyncio
-from homework_04.find_data.find_user import find_user
-from homework_04.find_data.find_post import find_post
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from models import async_engine, Base, Session
-from jsonplaceholder_requests import users, posts
+from jsonplaceholder_requests import fetch_users_data, fetch_post_data, USERS_DATA_URL, POSTS_DATA_URL
+from create_data.create_user import *
+from create_data.create_post import *
 
 
 async def async_main():
     async with async_engine.begin() as conn:  # Initialize the creation of tables
         await conn.run_sync(Base.metadata.drop_all)  # Drop table for avoid duplicate
         await conn.run_sync(Base.metadata.create_all)  # Create new table
+        users, posts = await asyncio.gather(fetch_users_data(USERS_DATA_URL),
+                                            fetch_post_data(POSTS_DATA_URL))
     async with Session() as session:  # Open session
-        async with session.begin():
-            await asyncio.gather(
-                find_user(users, session),
-                find_post(posts, session)
-            )
-        await session.commit()  # commit all add users and posts
-        await session.close()
+        await create_user_data(session, users)
+        await create_post_data(session, posts)
+    await session.close()
 
 
 def main():
