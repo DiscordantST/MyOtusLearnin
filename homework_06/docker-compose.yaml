@@ -1,0 +1,50 @@
+version: '3'
+services:
+  flask:
+    # Путь до Dockerfile
+    build: flask-app
+    # Имя для создаваемого контейнера
+    container_name: flask
+    # Создание переменных окружения в контейнере
+    environment:
+      # для отладки (при запуске на ПРОД убрать)
+#      - FLASK_ENV=development
+      ## Позволяет отслеживать процесс работы приложения в командной строке
+      - PYTHONUNBUFFERED=True
+    # Перезапускаем сервис
+    restart: always
+    # Прокладывам путь для файлов. Все файлы, которые хранятся у вас в
+    # директории ./flask-app, появятся в директории контейнера /flask-app
+    volumes:
+      - ./flask-app:/flask-app
+    # Открываем порт в контейнер
+    # Порт, который будет смотреть наружу : порт который используется внутри контейнера
+    ports:
+      - "5000:5000"
+    command: gunicorn app:"create_app()" -b 0.0.0.0:5000 --reload
+
+  pg:
+    # Указываем какой образ будем устанавливать
+    image: postgres
+    # Указываем название контейнера
+    container_name: postgres
+    # Создание переменных окружения
+    environment:
+      # Название БД
+      POSTGRES_DB: table_homework_6
+      # Установка юзера
+      POSTGRES_USER: user
+      # Пароль юзера
+      POSTGRES_PASSWORD: pass
+      # Путь для хранения данных и файлов конфиругурации
+      PGDATA: /var/lib/postgresql/data/pgdata
+    # Указываем порт для БД
+    ports:
+      - "5432:5432"
+    # По данному пути созраняются данные для контейнера БД, даже после перезапуска
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
+
+
+volumes:
+  db-data:
