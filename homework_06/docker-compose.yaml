@@ -1,50 +1,39 @@
-version: '3'
+version: '3.7'
 services:
+  pg:
+    image: postgres
+    container_name: postgresql
+    environment:
+      POSTGRES_DB: table_homework_6
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
   flask:
-    # Путь до Dockerfile
-    build: flask-app
+    # Собираем приложение по Dockerfile
+    build: ./flask-app
     # Имя для создаваемого контейнера
     container_name: flask
+    # Запуск приложения
+#    command: gunicorn wsgi:app -b 0.0.0.0:5555 --reload
     # Создание переменных окружения в контейнере
-    environment:
-      # для отладки (при запуске на ПРОД убрать)
-#      - FLASK_ENV=development
-      ## Позволяет отслеживать процесс работы приложения в командной строке
-      - PYTHONUNBUFFERED=True
+#    environment:
     # Перезапускаем сервис
     restart: always
-    # Прокладывам путь для файлов. Все файлы, которые хранятся у вас в
+    # Прокладывам путь для файлов. Все файлы, которые хранятся в
     # директории ./flask-app, появятся в директории контейнера /flask-app
     volumes:
-      - ./flask-app:/flask-app
+      - /usr/src/flask-app
     # Открываем порт в контейнер
     # Порт, который будет смотреть наружу : порт который используется внутри контейнера
     ports:
-      - "5000:5000"
-    command: gunicorn app:"create_app()" -b 0.0.0.0:5000 --reload
-
-  pg:
-    # Указываем какой образ будем устанавливать
-    image: postgres
-    # Указываем название контейнера
-    container_name: postgres
-    # Создание переменных окружения
-    environment:
-      # Название БД
-      POSTGRES_DB: table_homework_6
-      # Установка юзера
-      POSTGRES_USER: user
-      # Пароль юзера
-      POSTGRES_PASSWORD: pass
-      # Путь для хранения данных и файлов конфиругурации
-      PGDATA: /var/lib/postgresql/data/pgdata
-    # Указываем порт для БД
-    ports:
-      - "5432:5432"
-    # По данному пути созраняются данные для контейнера БД, даже после перезапуска
-    volumes:
-      - db-data:/var/lib/postgresql/data/pgdata
+      - "5555:5555"
+    depends_on:
+      - pg
 
 
 volumes:
-  db-data:
+   db-data:

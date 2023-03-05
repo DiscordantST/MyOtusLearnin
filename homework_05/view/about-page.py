@@ -1,1 +1,1 @@
-# for template about page
+# for templates about page

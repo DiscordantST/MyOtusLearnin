@@ -8,8 +8,19 @@ RUN pip install --upgrade pip -r requirements.txt
 RUN pip freeze > requirements.txt
 # копируем содержимое папки, где находится Dockerfile,
 # в рабочую директорию контейнера
-COPY . /homework_06
+COPY . /homework_06/
 # Устанавливаем порт, который будет использоваться для сервера
-EXPOSE 5000
-#
-CMD gunicorn app:"create_app()" -b 0.0.0.0:5000 --reload
+#EXPOSE 5555
+
+# running Flask as a module
+CMD ["sh", "-c", "sleep 5 \
+#    # ! run init only the first time you launch the stack and when the migrations folder do not exist yet
+#    && flask create-all \
+#    && flask db init \
+#    # ! To set the revision in the database to the head, without performing any migrations. You can change head to the required change you want.
+#    && flask db stamp head \
+#    && flask db migrate \
+#    && flask db upgrade \
+    && gunicorn wsgi:app -b 0.0.0.0:5555 --reload"]
+
+
