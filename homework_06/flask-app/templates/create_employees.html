@@ -1,15 +1,24 @@
+{% from 'form-errors-list.html' import form_errors_list %}
 {% block body %}
   <h2>Create a new employees</h2>
  <form method="post" enctype="multipart/form-data">
     {{ form.csrf_token }}
     <div class="mb-3">
       {{ form.username.label(class="form-label") }}
+      {{ form_errors_list(form.username.errors) }}
       {{ form.username(class="form-control") }}
     </div>
     <div class="mb-3">
       {{ form.data_employees.label(class="form-label") }}
+      {{ form_errors_list(form.data_employees.errors) }}
       {{ form.data_employees(class="form-control") }}
     </div>
+   <div class="mb-3">
+      {{ form.workplace.label(class="form-label") }}
+      {{ form_errors_list(form.workplace.errors) }}
+      {{ form.workplace(class="form-control") }}
+    </div>
+   <
     <div class="button-wrapper">
       <button id="btn-create" class="btn btn-primary" type="submit">Create</button>
     </div>

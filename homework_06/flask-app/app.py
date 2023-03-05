@@ -1,7 +1,7 @@
 import os
 from http import HTTPStatus
 
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, redirect
 from wtforms import StringField, validators
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms.validators import DataRequired
@@ -43,6 +43,7 @@ def index_page():
 class Employees_form(FlaskForm):
     username = StringField("ФИО", [validators.Length(min=3, max=100), DataRequired()])
     data_employees = StringField("Описание", [validators.Length(min=3, max=100), DataRequired()])
+    workplace = StringField("Рабочее место", [validators.Length(min=2, max=8), DataRequired()])
 
 
 @app.route('/create', methods=["GET", "POST"])
@@ -59,11 +60,14 @@ def create_page():
 
     employees = Employees(
             username=form.data["username"],
-            data_employees=form.data["data_employees"])
-    db.session.add(employees)
-    db.session.commit()
-    flash(f"Product {employees.username} was created!", category="success")
-    return redirect('/')
+            data_employees=form.data["data_employees"],
+            workplace=form.data["workplace"])
+    if not Employees.query.filter_by(workplace=form.data["workplace"]).first():
+        db.session.add(employees)
+        db.session.commit()
+        return redirect('/')
+    else:
+        return "Сотрудник данного рабочего места уже существует" and redirect("/create")
 
 
 if __name__ == "__main__":

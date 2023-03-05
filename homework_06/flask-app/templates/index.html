@@ -1,18 +1,21 @@
+<title>Список сотрудников</title>
+<div align="center">
+  <h1>Список сотрудников </h1>
+</div>
 <div align="center">
 <table border="1" cellspacing="1" cellpadding="1">
    <tr>
       <td align="center">ID</td>
       <td align="center">ФИО </td>
       <td align="center">Описание</td>
-      <td align="center"> Выбрать сотрудника </td>
+      <td align="center">Рабочее место</td>
+      <td align="center"> Редактировать/Удалить </td>
      {% for item in items %}
        <tr>
       <td>{{ item.id }}</td>
       <td>{{ item.username }}</td>
       <td >{{ item.data_employees }}</td>
-      <td align="center">
-        <label for="check"></label><input type="checkbox" id="check" name="interest" value="check" onclick="check()">
-      </td>
+      <td>{{ item.workplace }}</td>
      {% endfor %}
       </tr>
    </tr>

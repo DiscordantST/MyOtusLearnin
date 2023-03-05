@@ -17,6 +17,11 @@ class Employees(db.Model):
         String(200),
         nullable=False,
         default="",
-        server_default=""
+        server_default="")
+    workplace = Column(
+        String,
+        nullable=False,
+        unique=True
     )
+
 

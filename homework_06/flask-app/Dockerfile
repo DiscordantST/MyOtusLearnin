@@ -15,7 +15,7 @@ COPY . /homework_06/
 # running Flask as a module
 CMD ["sh", "-c", "sleep 5 \
 #    # ! run init only the first time you launch the stack and when the migrations folder do not exist yet
-#    && flask create-all \
+    && flask create-all \
 #    && flask db init \
 #    # ! To set the revision in the database to the head, without performing any migrations. You can change head to the required change you want.
 #    && flask db stamp head \
