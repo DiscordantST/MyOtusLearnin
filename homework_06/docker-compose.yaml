@@ -1,39 +1,55 @@
-version: '3.7'
+version: '3.9'
 services:
   pg:
     image: postgres
-    container_name: postgresql
     environment:
       POSTGRES_DB: table_homework_6
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       PGDATA: /var/lib/postgresql/data/pgdata
-    ports:
-      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data/pgdata
-  flask:
-    # Собираем приложение по Dockerfile
-    build: ./flask-app
-    # Имя для создаваемого контейнера
-    container_name: flask
-    # Запуск приложения
-#    command: gunicorn wsgi:app -b 0.0.0.0:5555 --reload
-    # Создание переменных окружения в контейнере
-#    environment:
-    # Перезапускаем сервис
-    restart: always
-    # Прокладывам путь для файлов. Все файлы, которые хранятся в
-    # директории ./flask-app, появятся в директории контейнера /flask-app
-    volumes:
-      - /usr/src/flask-app
-    # Открываем порт в контейнер
-    # Порт, который будет смотреть наружу : порт который используется внутри контейнера
     ports:
-      - "5555:5555"
-    depends_on:
-      - pg
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 3s
+      retries: 7
+  pgadmin:
+    image: "dpage/pgadmin4"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: passwd!
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
 
+  app: &app-config
+    build:
+      dockerfile: docker-build/app/Dockerfile
+    environment:
+#      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://user:pass@pg:5432/table_homework_6
+      CONFIG_NAME: ProductionConfig
+    ports:
+      - "5555:80"
+    depends_on:
+      pg:
+        condition: service_healthy
+  app-dev:
+    <<: *app-config
+    environment:
+      CONFIG_NAME: DevelopmentConfig
+    command:
+      - "python"
+      - "main.py"
+    ports:
+      - "5556:5000"
+    volumes:
+      - ./app:/app
 
 volumes:
-   db-data:
+  db-data:
+  pgadmin:

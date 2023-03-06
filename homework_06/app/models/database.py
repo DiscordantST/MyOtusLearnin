@@ -9,4 +9,3 @@ db = SQLAlchemy()
 # инициализируем миграцию
 
 migrate_db = Migrate()
-

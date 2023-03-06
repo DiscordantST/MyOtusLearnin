@@ -1,0 +1,2 @@
+для запуска в режиме продакшен - docker-compose up --build app
+для запуска в режиме разработки - docker-compose up --build app-dev
