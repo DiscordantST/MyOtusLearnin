@@ -9,13 +9,17 @@
       <td align="center">ФИО </td>
       <td align="center">Описание</td>
       <td align="center">Рабочее место</td>
-      <td align="center"> Редактировать/Удалить </td>
+      <td align="center"> Редактировать | Удалить </td>
      {% for item in items %}
-       <tr>
+       <tr id = 'item-emp'>
       <td>{{ item.id }}</td>
       <td>{{ item.username }}</td>
       <td >{{ item.data_employees }}</td>
       <td>{{ item.workplace }}</td>
+       <td>
+         <button>Редактировать</button>
+         <button>Удалить</button>
+       </td>
      {% endfor %}
       </tr>
    </tr>

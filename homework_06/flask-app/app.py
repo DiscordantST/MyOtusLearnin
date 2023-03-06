@@ -2,7 +2,7 @@ import os
 from http import HTTPStatus
 
 from flask import Flask, render_template, request, redirect
-from wtforms import StringField, validators
+from wtforms import StringField, validators, SubmitField
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms.validators import DataRequired
 
@@ -43,7 +43,8 @@ def index_page():
 class Employees_form(FlaskForm):
     username = StringField("ФИО", [validators.Length(min=3, max=100), DataRequired()])
     data_employees = StringField("Описание", [validators.Length(min=3, max=100), DataRequired()])
-    workplace = StringField("Рабочее место", [validators.Length(min=2, max=8), DataRequired()])
+    workplace = StringField("Рабочее место", [DataRequired()])
+    submit = SubmitField("Создать")
 
 
 @app.route('/create', methods=["GET", "POST"])
