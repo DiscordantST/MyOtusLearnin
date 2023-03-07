@@ -31,22 +31,20 @@ services:
     build:
       dockerfile: docker-build/app/Dockerfile
     environment:
-#      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://user:pass@pg:5432/table_homework_6
       CONFIG_NAME: ProductionConfig
     ports:
-      - "5555:80"
+      - "1080:80"
     depends_on:
       pg:
         condition: service_healthy
   app-dev:
     <<: *app-config
+    build:
+      dockerfile: docker-build/app-dev/Dockerfile
     environment:
       CONFIG_NAME: DevelopmentConfig
-    command:
-      - "python"
-      - "main.py"
     ports:
-      - "5556:5000"
+      - "1081:5000"
     volumes:
       - ./app:/app
 

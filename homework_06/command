@@ -1,2 +1,5 @@
-для запуска в режиме продакшен - docker-compose up --build app
-для запуска в режиме разработки - docker-compose up --build app-dev
+для запуска в режиме продакшен - docker-compose up --build - d app
+для запуска в режиме разработки - docker-compose up --build -d app-dev
+
+
+для просмотра логов - docker compose logs -f app-dev или docker compose logs -f app
