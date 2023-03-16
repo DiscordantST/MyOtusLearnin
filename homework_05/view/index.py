@@ -1,1 +1,1 @@
-# for template index page
+# for templates index page
