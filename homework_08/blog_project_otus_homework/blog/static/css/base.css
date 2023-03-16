@@ -1,0 +1,23 @@
+footer {
+   position:fixed;
+   left:0px;
+   bottom:0px;
+   height:30px;
+   width:100%;
+
+}
+
+.list-group{
+   padding-top: 40px;
+}
+
+#info{
+   padding-top: 40px;
+}
+
+.post-entry{
+   padding-top: 40px;
+   padding-left: 20px;
+}
+
+
