@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+  <title> Список постов </title>
+{% endblock title %}
+{% block content %}
+
+  <div class="list-group">
+
+   <ul class="list-group">
+  {% for post in object_list %}
+    <li class="list-group-item"><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
+  {% endfor %}
+   <br>
+   <a class="btn btn-lg btn-primary" id="new-post" href="{% url 'post_new' %}" role="button" >Создать новый пост</a>
+  </ul>
+  </div>
+
+{% endblock content %}
+
+
+
+
