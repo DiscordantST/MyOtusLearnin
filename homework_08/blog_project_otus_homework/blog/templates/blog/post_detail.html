@@ -3,12 +3,16 @@
   <title> Пост #{{ post.pk }}</title>
 {% endblock title %}
 {% block content %}
+  <br>
+  <p><a href="{% url 'post_edit' post.pk %}" class="badge rounded-pill bg-warning">Редактировать пост</a></p>
+  <p><a href="{% url 'post_delete' post.pk %}" class="badge rounded-pill bg-danger">Удалить пост</a></p>
+
   <div class="post-entry">
     <h2>{{ object.title }}</h2> <p>Автор: {{ object.author }}</p>
         <br>
     <p>{{ object.body }}</p>
 
-  <p><a href="{% url 'post_edit' post.pk %}">Редактировать пост</a></p>
-  <p><a href="{% url 'post_delete' post.pk %}">Удалить пост</a></p>
+
   </div>
+
 {% endblock content %}
