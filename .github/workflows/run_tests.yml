@@ -60,9 +60,7 @@ jobs:
         pytest testing -s -vv -rsx
       env:
         SQLALCHEMY_PG_CONN_URI: postgresql+asyncpg://postgres:secretpassword@localhost:5432/postgres
-    - name: Go to folder
-      run:
+    - name: Django
+      run: |
         cd "./homework_10/blog_project_otus_homework"
-    - name: Django test
-      run:
         python manage.py test
