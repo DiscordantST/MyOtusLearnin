@@ -66,18 +66,17 @@ jobs:
   django_project:
     needs: homework-tests
     # This workflow contains a single job called "build"
-    build:
       # The type of runner that the job will run on
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
       # Add in environment variables for the entire "build" job
-      env:
+    env:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
         POSTGRES_HOST: localhost # default host value for the database
         POSTGRES_DB: djtesting
         POSTGRES_PORT: 5432
         DJANGO_SECRET_KEY: test-key-not-good
-      services:
+    services:
         postgres_main:
           image: postgres:12
           env:
@@ -92,11 +91,11 @@ jobs:
             --health-timeout 5s 
             --health-retries 5
       # If you want to test multiple python version(s)
-      strategy:
+    strategy:
         matrix:
           python-version: ["3.8"] # ["3.8", "3.9", "3.10"]
       # Steps represent a sequence of tasks that will be executed as part of the job
-      steps:
+    steps:
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
         - name: Checkout code
           uses: actions/checkout@v2
