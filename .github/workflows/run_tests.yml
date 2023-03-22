@@ -62,4 +62,5 @@ jobs:
         SQLALCHEMY_PG_CONN_URI: postgresql+asyncpg://postgres:secretpassword@localhost:5432/postgres
     - name: Test with Django
       run:
+        cd ./homework_10/blog_project_otus_homework/
         python manage.py test
