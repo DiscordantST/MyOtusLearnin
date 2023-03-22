@@ -63,7 +63,7 @@ jobs:
 
 
 
-django_project:
+test:
   needs: homework-tests
   env:
     POSTGRES_USER: postgres
