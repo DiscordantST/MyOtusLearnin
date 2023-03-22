@@ -117,7 +117,7 @@ jobs:
             DB_PORT: ${{ env.POSTGRES_PORT }}
           run: |
             cd "./homework_10/blog_project_otus_homework"
-            python manage.py test
+            pytest -s -vv
 #    - name: Django
 #      run: |
 #        cd "./homework_10/blog_project_otus_homework"
