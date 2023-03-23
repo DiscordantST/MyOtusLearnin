@@ -82,24 +82,23 @@ jobs:
             --health-timeout 5s 
             --health-retries 5
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-        - name: Setup Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v2
-          with:
-            python-version: '3.11'
-        - name: Install requirements
-          run: |
-            cd "./homework_10/"
-            pip install -r requirements.txt
-        - name: Run Tests
-          env:
-            DEBUG: "0"
-            DB_USERNAME: ${{ env.POSTGRES_USER }}
-            DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-            DB_HOST: ${{ env.POSTGRES_HOST }}
-            DB_DATABASE: ${{ env.POSTGRES_DB }}
-            DB_PORT: ${{ env.POSTGRES_PORT }}
-          run: |
-            cd "./homework_10/blog_project_otus_homework"
-            pytest -s -vv
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install requirements
+        run: |
+              cd "./homework_10/"
+              pip install -r requirements.txt
+      - name: Run Tests
+        env:
+              DEBUG: "0"
+              DB_USERNAME: ${{ env.POSTGRES_USER }}
+              DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+              DB_HOST: ${{ env.POSTGRES_HOST }}
+              DB_DATABASE: ${{ env.POSTGRES_DB }}
+              DB_PORT: ${{ env.POSTGRES_PORT }}
+        run: |
+              cd "./homework_10/blog_project_otus_homework"
+              pytest -s -vv
