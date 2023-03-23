@@ -102,3 +102,4 @@ jobs:
         run: |
               cd "./homework_10/blog_project_otus_homework"
               pytest -s -vv
+              coverage run manage.py test && coverage report --fail-under=90
