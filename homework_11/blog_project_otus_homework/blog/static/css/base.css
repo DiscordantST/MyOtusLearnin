@@ -1,0 +1,24 @@
+#footer-blog {
+	/*flex: 0 0 auto;*/
+    padding: 1em;
+
+    text-align: center;
+
+}
+
+.list-group{
+   padding-top: 40px;
+}
+
+#info{
+   padding-top: 40px;
+}
+
+.post-entry{
+   padding-top: 40px;
+   padding-left: 20px;
+}
+
+
+
+
