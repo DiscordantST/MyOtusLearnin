@@ -21,10 +21,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps tcp port 5432 on service container to the host
           - 5432:5432
-
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.11
@@ -61,17 +58,12 @@ jobs:
       env:
         SQLALCHEMY_PG_CONN_URI: postgresql+asyncpg://postgres:secretpassword@localhost:5432/postgres
 
-
-
   django_project:
-    # This workflow contains a single job called "build"
-      # The type of runner that the job will run on
     runs-on: ubuntu-latest
-      # Add in environment variables for the entire "build" job
     env:
         POSTGRES_USER: user
         POSTGRES_PASSWORD: pass
-        POSTGRES_HOST: localhost # default host value for the database
+        POSTGRES_HOST: localhost
         POSTGRES_DB: table_project
         POSTGRES_PORT: 5432
         DJANGO_SECRET_KEY: test-key-not-good
@@ -89,25 +81,18 @@ jobs:
             --health-interval 10s 
             --health-timeout 5s 
             --health-retries 5
-      # If you want to test multiple python version(s)
-    strategy:
-        matrix:
-          python-version: ["3.8"] # ["3.8", "3.9", "3.10"]
-      # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
         - name: Checkout code
           uses: actions/checkout@v2
         - name: Setup Python ${{ matrix.python-version }}
           uses: actions/setup-python@v2
           with:
-            python-version: ${{ matrix.python-version }}
+            python-version: '3.11'
         - name: Install requirements
           run: |
             cd "./homework_10/"
             pip install -r requirements.txt
         - name: Run Tests
-          # Step specific environment variables
           env:
             DEBUG: "0"
             DB_USERNAME: ${{ env.POSTGRES_USER }}
@@ -118,8 +103,3 @@ jobs:
           run: |
             cd "./homework_10/blog_project_otus_homework"
             pytest -s -vv
-#    - name: Django
-#      run: |
-#        cd "./homework_10/blog_project_otus_homework"
-#        python manage.py test
-        
