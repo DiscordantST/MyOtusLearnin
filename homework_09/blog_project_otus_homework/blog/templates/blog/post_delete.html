@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+
+ {% block title %}
+  <title> Удаление поста #{{ post.pk }}</title>
+{% endblock title %}
+
+{% block content %}
+    <h1 align="center">Удаление поста</h1>
+  <br>
+    <form action="" method="post">{% csrf_token %}
+
+      <p align="center">Вы действительно хотите удалить пост: "{{ post.title }}"?</p>
+      <table border="0" align="center" cellpadding="10" cellspacing="1" width="10" height="10">
+        <tr>
+          <td>
+          <input class="btn btn-danger" type="submit" value="Удалить" />
+          </td>
+          <td>
+            <a href="{% url 'post_detail' post.pk %}" class="btn btn-secondary">Отмена</a>
+{#          <p><a href="{% url 'post_detail' post.pk %}" class="btn btn-danger">Отмена</a></p>#}
+         </td>
+        </tr>
+      </table>
+
+
+    </form>
+  
+{% endblock content %}
