@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 from flask import Flask, render_template, request, url_for, flash, redirect
-from werkzeug.exceptions import abort
 
 from models import db, migrate_db, Posts
 
@@ -24,8 +23,6 @@ migrate_db.init_app(app, db)
 
 def get_post(post_id):
     post = Posts.query.filter_by(id=post_id).one_or_404(description=f"post {post_id} not found")
-    if post is None:
-        abort(404)
     return post
 
 
@@ -58,7 +55,7 @@ def create():
         else:
             post = Posts(
                 content=content,
-                title=title
+                title=title,
             )
             db.session.add(post)
             db.session.commit()
