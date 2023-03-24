@@ -19,11 +19,11 @@ app.config.from_object(f"config.{config_name}")
 db.init_app(app)
 
 # делаем миграцию данных
-migrate_db.__init__(app=app, db=db)
+migrate_db.init_app(app, db)
 
 
 def get_post(post_id):
-    post = Posts.query.filter_by(id=post_id).first()
+    post = Posts.query.filter_by(id=post_id).one_or_404(description=f"post {post_id} not found")
     if post is None:
         abort(404)
     return post
