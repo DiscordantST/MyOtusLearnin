@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'table_project',
         'USER': 'user',
         'PASSWORD': 'pass',
-        'HOST': 'localhost',
+        'HOST': 'pg',
         'PORT': '5432',
     }
 }
