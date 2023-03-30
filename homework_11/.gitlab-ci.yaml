@@ -1,60 +1,116 @@
-image: python:3.10.5
+
+# workflow:
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  MYSQL_DATABASE: $MYSQL_DB
+  MYSQL_ROOT_PASSWORD: $MYSQL_PASS
+  MYSQL_USER: $MYSQL_USER
+  MYSQL_PASSWORD: $MYSQL_PASS
 
-cache:
-  paths:
-    - .cache/pip
-
-stages:
-  - test
-  - build
-  - deploy
-
-before_script:
-  - cd ./homework_11
-  - python3 --version  # For debugging
-  - pip3 install -U pip
-  - pip3 install -r requirements.txt
-
-test:
-  stage: test
+default:
+  image: ubuntu:20.04
   services:
-    - postgres:14-alpine
-  variables:
-    POSTGRES_DB: table_project
-    POSTGRES_USER: user
-    POSTGRES_PASSWORD: pass
-    POSTGRES_HOST: pg
-    POSTGRES_PORT: 5432
-    COVERAGE_DIR: coverage-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    - mysql:8.0
+
+  cache:
+    paths:
+      - ~/.cache/pip/
+  before_script:
+    - cd ./homework_11
+    - pip3 install -r requirements.txt
+
+
+django-tests:
+  stage: test
   script:
-    - cd blog_project_otus_homework
+    - cd ./blog_project_otus_homework
+    - python3 manage.py makemigrations
+    - python3 manage.py migrate
+    - python3 manage.py check
     - coverage run --source='.' manage.py test --verbosity=2
     - coverage xml -o coverage.xml
     - coverage html -d ./$COVERAGE_DIR
-  artifacts:
-    name: "coverage-report-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
-    paths:
-      - blog/$COVERAGE_DIR
-    when: on_success
-    expire_in: 1 week
 
-test-echo:
-  stage: test
-  needs:
-    - test
-  script:
-    - echo 'Tests have been completed'
-
-build:
-  stage: build
-  script:
-    - echo 'Build app'
-
-deploy-remote:
+deploy:
   stage: deploy
-  script:
-    - echo "Deploy to remote..."
+  needs:
+    - django-tests
+  script: echo "Define your deployment script!"
+  environment: production
 
+
+#
+#
+#
+#image: python:3.10.5
+#
+#variables:
+#  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+#
+#cache:
+#  paths:
+#    - .cache/pip
+#
+#stages:
+#  - test
+#  - build
+#  - deploy
+#
+#before_script:
+#  - cd ./homework_11
+#  - python3 --version  # For debugging
+#  - pip3 install -U pip
+#  - pip3 install -r requirements.txt
+#
+#migrations:
+#  stage: build
+#  script:
+#    - cd blog_project_otus_homework
+#    - python3 manage.py makemigrations
+#    - python3 manage.py migrate
+##    - python3 manage.py check
+#
+#test:
+#  stage: test
+#  services:
+#    - name: postgres:14-alpine
+#  alias: pg
+#  environment:
+#    POSTGRES_DB: table_project
+#    POSTGRES_USER: user
+#    POSTGRES_PASSWORD: pass
+#    POSTGRES_HOST: pg
+#    POSTGRES_PORT: 5432
+#    COVERAGE_DIR: coverage-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+#
+#  script:
+#    - cd blog_project_otus_homework
+#    - coverage run --source='.' manage.py test --verbosity=2
+#    - coverage xml -o coverage.xml
+#    - coverage html -d ./$COVERAGE_DIR
+#  artifacts:
+#    name: "coverage-report-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
+#    paths:
+#      - blog/$COVERAGE_DIR
+#    when: on_success
+#    expire_in: 1 week
+#
+#test-echo:
+#  stage: test
+#  needs:
+#    - test
+#  script:
+#    - echo 'Tests have been completed'
+#
+#build:
+#  stage: build
+#  script:
+#    - echo 'Build app'
+#
+#deploy-remote:
+#  stage: deploy
+#  script:
+#    - echo "Deploy to remote..."
+#
